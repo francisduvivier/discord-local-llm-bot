@@ -1,7 +1,13 @@
 import {Client} from "discord.js";
 
+const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
+if (!DISCORD_BOT_TOKEN) {
+    throw new Error('DISCORD_BOT_TOKEN needs to be set in environment!');
+}
+
 const DISCORD_CHANNELS = process.env.DISCORD_CHANNELS?.split(',') ?? [];
 console.log('DISCORD_CHANNELS from env', DISCORD_CHANNELS);
+
 const client = new Client({
     intents: ["Guilds",
         "GuildMessages",
@@ -26,7 +32,7 @@ async function startBot() {
         // Write your message here
         console.log(`Received message: ${message.content}`);
     });
-    await client.login("MTE2Mzk1MTkwMDg0NTE2MjU4Ng.GHlJ0g.ffW2c6LAQYZzxBqaAb2cpBIu7FsNMrEe0-Ptfs"); // Replace with your bot token
+    await client.login(DISCORD_BOT_TOKEN); // Replace with your bot token
 }
 
 startBot();
