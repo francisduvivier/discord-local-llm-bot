@@ -1,6 +1,7 @@
 import {Client} from "discord.js";
 import * as util from "util";
 import {channel} from "diagnostics_channel";
+import {getAnswer} from "./langchain-ollama.ts";
 
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 if (!DISCORD_BOT_TOKEN) {
@@ -40,11 +41,13 @@ async function startBot() {
 
         // Write your message here
     });
-    client.on("messageCreate", message => {
+    client.on("messageCreate", async message => {
         if (message.author === client.user) return; // Don't respond to messages sent by the bot itself
-        if(isSupportedChannel(message.channelId) && message.content?.includes(client.user!.id)){
+        const messageContent = message.content;
+        if(isSupportedChannel(message.channelId) && messageContent?.includes(client.user!.id)){
             const channel = client.channels.cache.find(channel=>channel.id == message.channelId)!;
-            channel.send("hi there! thanks for tagging me, with your message that said `"+message.content+"`")
+            const answer = await getAnswer(messageContent.replaceAll(client.user!.id, 'My allknowing Mistral'))
+            await channel.send(answer);
         }
     });
     await client.login(DISCORD_BOT_TOKEN); // Replace with your bot token
