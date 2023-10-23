@@ -63,13 +63,13 @@ async function startBot() {
             let currentReplyMessage = reply;
             let busy = false;
             let finished = false;
-            const answer = getAnswer(question, async (token: string) => {
+            const answer = await getAnswer(question, async (token: string) => {
 
                 reply += token;
                 if (busy) return;
                 busy = true;
                 try {
-                    while (currentReplyMessage !== reply) {
+                    while (currentReplyMessage !== reply || finished) {
                         currentReplyMessage = reply;
                         while (currentReplyMessage.length + 4 > 2000) {
                             await answerMessage.edit(currentReplyMessage.slice(0, 2000));
@@ -83,10 +83,7 @@ async function startBot() {
                     busy = false;
                 }
             });
-            const channel = client.channels.cache.find(channel => channel.id == message.channelId)!;
-            await channel.send(answer);
             finished = true;
-            await answerMessage.edit(currentReplyMessage);
         }
     });
     await client.login(DISCORD_BOT_TOKEN); // Replace with your bot token
