@@ -1,6 +1,6 @@
 import {Client} from "discord.js";
 
-const LLM_PLAYGROUND_CHANNEL = '1163955919164551300';
+const DISCORD_CHANNELS = ['1163955919164551300'];
 
 const client = new Client({
     intents: ["Guilds",
@@ -14,7 +14,7 @@ async function startBot() {
     client.on("ready", () => {
         console.log(`Logged in as ${client.user?.tag}!`);
         client.channels.cache.forEach((channel) => {
-            if (channel.id == LLM_PLAYGROUND_CHANNEL) {
+            if (DISCORD_CHANNELS.includes(channel.id)) {
                 channel.send("Hello, LLM_PLAYGROUND_CHANNEL! I just started up.");
             }
         });
