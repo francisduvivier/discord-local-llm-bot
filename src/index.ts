@@ -59,9 +59,10 @@ async function startBot() {
             console.log(`extracted question: ${question}`);
             // Reply to the message
             let reply = `Hi ${message.author.username}, `;
-            const answerMessage = await message.reply(reply);
+            let answerMessage = await message.reply(reply);
             let currentReplyMessage = reply;
             let busy = false;
+            let finished = false;
             const answer = getAnswer(question, async (token: string) => {
 
                 reply += token;
@@ -70,7 +71,13 @@ async function startBot() {
                 try {
                     while (currentReplyMessage !== reply) {
                         currentReplyMessage = reply;
-                        await answerMessage.edit(currentReplyMessage + ' <->');
+                        while (currentReplyMessage.length + 4 > 2000) {
+                            await answerMessage.edit(currentReplyMessage.slice(0, 2000));
+                            reply = currentReplyMessage.slice(2000);
+                            currentReplyMessage = reply;
+                            answerMessage = await message.reply(currentReplyMessage.slice(0, 1996) + ' <->');
+                        }
+                        await answerMessage.edit(currentReplyMessage + (finished ? '' : ' <->'));
                     }
                 } finally {
                     busy = false;
@@ -78,6 +85,7 @@ async function startBot() {
             });
             const channel = client.channels.cache.find(channel => channel.id == message.channelId)!;
             await channel.send(answer);
+            finished = true;
             await answerMessage.edit(currentReplyMessage);
         }
     });
