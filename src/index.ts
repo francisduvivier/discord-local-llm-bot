@@ -62,11 +62,16 @@ async function startBot() {
             const answerMessage = await message.reply(reply);
             let busy = false;
             const answer = getAnswer(question, async (token: string) => {
+                let currentReplyMessage = reply;
+
                 reply += token;
                 if (busy) return;
                 busy = true;
                 try {
-                    await answerMessage.edit(reply);
+                    while (currentReplyMessage !== reply) {
+                        currentReplyMessage = reply;
+                        await answerMessage.edit(currentReplyMessage);
+                    }
                 } finally {
                     busy = false;
                 }
