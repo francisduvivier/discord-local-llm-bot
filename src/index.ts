@@ -43,10 +43,15 @@ async function startBot() {
     });
     client.on("messageCreate", async message => {
         if (message.author === client.user) return; // Don't respond to messages sent by the bot itself
+        if (isSupportedChannel(message.channelId)) return;
         const messageContent = message.content;
-        if(isSupportedChannel(message.channelId) && messageContent?.includes(client.user!.id)){
-            const channel = client.channels.cache.find(channel=>channel.id == message.channelId)!;
-            const answer = await getAnswer(messageContent.replaceAll(client.user!.id, 'My allknowing Mistral'))
+        const messageMatch = messageContent?.match('.*' + client.user!.id + '[^a-zA-Z]*(?<question>.*)');
+        console.log(`message received: ${messageContent}`);
+        if (messageMatch?.groups) {
+            const question = messageMatch.groups.question
+            console.log(`extracted question: ${question}`);
+            const answer = await getAnswer(question)
+            const channel = client.channels.cache.find(channel => channel.id == message.channelId)!;
             await channel.send(answer);
         }
     });
