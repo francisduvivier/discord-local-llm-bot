@@ -44,7 +44,7 @@ async function startBot() {
     client.on("messageCreate", async message => {
         if (message.author === client.user) return; // Don't respond to messages sent by the bot itself
         const messageContent = message.content;
-        const messageMatch = messageContent?.match('.*' + client.user!.id + '[^a-zA-Z]*(?<question>.*)');
+        const messageMatch = messageContent?.match(`.*${client.user!.id}[^a-zA-Z]*(?<question>.*)`);
         console.log(`message received: ${messageContent}`);
         if (messageMatch?.groups) {
             const question = messageMatch.groups.question
