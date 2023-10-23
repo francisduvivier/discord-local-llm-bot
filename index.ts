@@ -1,4 +1,6 @@
 import {Client} from "discord.js";
+import * as util from "util";
+import {channel} from "diagnostics_channel";
 
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 if (!DISCORD_BOT_TOKEN) {
@@ -16,11 +18,17 @@ const client = new Client({
 });
 
 
+function isSupportedChannel(channelId: string) {
+    return DISCORD_CHANNELS.includes(channelId);
+}
+
 async function startBot() {
     client.on("ready", () => {
         console.log(`Logged in as ${client.user?.tag}!`);
+        console.log('client.user', util.inspect(client.user));
+
         client.channels.cache.forEach((channel) => {
-            if (DISCORD_CHANNELS.includes(channel.id)) {
+            if (isSupportedChannel(channel.id)) {
                 channel.send("Hello, LLM_PLAYGROUND_CHANNEL! I just started up.");
             }
         });
@@ -28,9 +36,16 @@ async function startBot() {
 
     client.on("message", (message) => {
         if (message.author === client.user) return; // Don't respond to messages sent by the bot itself
+        console.log(`Received message: ${message.content}`);
 
         // Write your message here
-        console.log(`Received message: ${message.content}`);
+    });
+    client.on("messageCreate", message => {
+        if (message.author === client.user) return; // Don't respond to messages sent by the bot itself
+        if(isSupportedChannel(message.channelId) && message.content?.includes(client.user!.id)){
+            const channel = client.channels.cache.find(channel=>channel.id == message.channelId)!;
+            channel.send("hi there! thanks for tagging me, with your message that said `"+message.content+"`")
+        }
     });
     await client.login(DISCORD_BOT_TOKEN); // Replace with your bot token
 }
