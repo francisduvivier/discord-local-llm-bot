@@ -9,6 +9,8 @@ if (!DISCORD_BOT_TOKEN) {
 }
 
 const DISCORD_CHANNELS = process.env.DISCORD_CHANNELS?.split(',') ?? [];
+const KO_LAB_TEST_CHANNELS = ['830797493335097375'];
+const ALLOWED_DISCORD_CHANNELS = [...DISCORD_CHANNELS, ...KO_LAB_TEST_CHANNELS];
 console.log('DISCORD_CHANNELS from env', DISCORD_CHANNELS);
 
 const client = new Client({
@@ -28,9 +30,11 @@ async function startBot() {
         console.log(`Logged in as ${client.user?.tag}!`);
         console.log('client.user', util.inspect(client.user));
 
-        client.channels.cache.forEach((channel) => {
+        client.channels.cache.forEach(async (channel) => {
             if (isSupportedChannel(channel.id)) {
-                channel.send("Hello, LLM_PLAYGROUND_CHANNEL! I just started up.");
+                const message = await channel.send("Hello, LLM_PLAYGROUND_CHANNEL! I just started up.");
+                message.edit('Hello, LLM_PLAYGROUND_CHANNEL! I just started up. I can edit messages.')
+
             }
         });
     });
@@ -43,6 +47,7 @@ async function startBot() {
     });
     client.on("messageCreate", async message => {
         if (message.author === client.user) return; // Don't respond to messages sent by the bot itself
+        if (!ALLOWED_DISCORD_CHANNELS.includes(message.channelId)) return; // Don't respond to messages sent by the bot itself
         const botId = client.user!.id;
         const mentionedBotId = message.mentions.users.has(botId);
         const messageContent = message.content;
@@ -61,7 +66,7 @@ async function startBot() {
                 if (busy) return;
                 busy = true;
                 try {
-                    await answerMessage.edit(reply)
+                    await answerMessage.edit(reply);
                 } finally {
                     busy = false;
                 }
