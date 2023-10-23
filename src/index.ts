@@ -43,7 +43,6 @@ async function startBot() {
     });
     client.on("messageCreate", async message => {
         if (message.author === client.user) return; // Don't respond to messages sent by the bot itself
-        if (isSupportedChannel(message.channelId)) return;
         const messageContent = message.content;
         const messageMatch = messageContent?.match('.*' + client.user!.id + '[^a-zA-Z]*(?<question>.*)');
         console.log(`message received: ${messageContent}`);
