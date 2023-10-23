@@ -60,9 +60,9 @@ async function startBot() {
             // Reply to the message
             let reply = `Hi ${message.author.username}, `;
             const answerMessage = await message.reply(reply);
+            let currentReplyMessage = reply;
             let busy = false;
             const answer = getAnswer(question, async (token: string) => {
-                let currentReplyMessage = reply;
 
                 reply += token;
                 if (busy) return;
@@ -70,7 +70,7 @@ async function startBot() {
                 try {
                     while (currentReplyMessage !== reply) {
                         currentReplyMessage = reply;
-                        await answerMessage.edit(currentReplyMessage);
+                        await answerMessage.edit(currentReplyMessage + ' <->');
                     }
                 } finally {
                     busy = false;
@@ -78,6 +78,7 @@ async function startBot() {
             });
             const channel = client.channels.cache.find(channel => channel.id == message.channelId)!;
             await channel.send(answer);
+            await answerMessage.edit(currentReplyMessage);
         }
     });
     await client.login(DISCORD_BOT_TOKEN); // Replace with your bot token
