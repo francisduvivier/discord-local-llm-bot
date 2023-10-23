@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "discord.js": "^14.13.0",
-    "eslint": "^8.51.0"
+    "eslint": "^8.51.0",
+    "langchain": "^0.0.170"
   }
 }
