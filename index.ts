@@ -1,13 +1,23 @@
 import {Client} from "discord.js";
 
+const LLM_PLAYGROUND_CHANNEL = '1163955919164551300';
+
 const client = new Client({
-    intents: ["Guilds", "DirectMessages", "GuildMessages"], // Set the intents for your bot
+    intents: ["Guilds",
+        "GuildMessages",
+        "MessageContent"
+    ], // Set the intents for your bot
 });
 
 
 async function startBot() {
     client.on("ready", () => {
         console.log(`Logged in as ${client.user?.tag}!`);
+        client.channels.cache.forEach((channel) => {
+            if (channel.id == LLM_PLAYGROUND_CHANNEL) {
+                channel.send("Hello, LLM_PLAYGROUND_CHANNEL! I just started up.");
+            }
+        });
     });
 
     client.on("message", (message) => {
