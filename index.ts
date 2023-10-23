@@ -1,7 +1,7 @@
 import {Client} from "discord.js";
 
-const DISCORD_CHANNELS = ['1163955919164551300'];
-
+const DISCORD_CHANNELS = process.env.DISCORD_CHANNELS?.split(',') ?? [];
+console.log('DISCORD_CHANNELS from env', DISCORD_CHANNELS);
 const client = new Client({
     intents: ["Guilds",
         "GuildMessages",
