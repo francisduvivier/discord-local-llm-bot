@@ -14,13 +14,14 @@ bun run index.ts
 ```
 
 ## Features
-- Uses a local large language model by using ollama.
+- Uses a local large language model by using [ollama](https://github.com/jmorganca/ollama).
 - Answers to messages when it's tagged in one of the allowed channels.
 - Posts to a channel when it comes online.
 - Streaming output: takes the streaming output of the LLM and then used the discord edit api to update the message every 5 seconds.
 
 ## TODO's
 ### Chatty
+- Token output limit to avoid endless response.
 - Provide the sender in the question to the llm and provide a system prompt to inform that it is now the KO-LAB LLM Discord bot.
 - Back and forth conversations
 - Maybe: Move to orange pi using MLC-AI
