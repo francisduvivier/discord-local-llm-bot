@@ -14,7 +14,7 @@ bun run index.ts
 ```
 
 ## Features
-- Uses a local large language model by using [ollama](https://github.com/jmorganca/ollama).
+- Uses a local large language model by using [ollama](https://github.com/jmorganca/ollama) via [langchain](https://github.com/langchain-ai/langchainjs).
 - Answers to messages when it's tagged in one of the allowed channels.
 - Posts to a channel when it comes online.
 - Streaming output: takes the streaming output of the LLM and then used the discord edit api to update the message every 5 seconds.
