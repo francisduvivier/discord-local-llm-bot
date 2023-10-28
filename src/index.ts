@@ -1,6 +1,5 @@
 import { Client } from "discord.js";
 import * as util from "util";
-import { channel } from "diagnostics_channel";
 import { getAnswer } from "./langchain-ollama.ts";
 
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
@@ -8,10 +7,9 @@ if (!DISCORD_BOT_TOKEN) {
     throw new Error('DISCORD_BOT_TOKEN needs to be set in environment!');
 }
 
-const DISCORD_CHANNELS = process.env.DISCORD_CHANNELS?.split(',') ?? [];
-const KO_LAB_TEST_CHANNELS = ['830797493335097375'];
-const ALLOWED_DISCORD_CHANNELS = [...DISCORD_CHANNELS, ...KO_LAB_TEST_CHANNELS];
-console.log('DISCORD_CHANNELS from env', DISCORD_CHANNELS);
+const DISCORD_ANNOUNCEMENT_CHANNELS = process.env.DISCORD_ANNOUNCEMENT_CHANNELS?.split(',');
+const DISCORD_ANSWER_CHANNELS = process.env.DISCORD_ANSWER_CHANNELS?.split(',');
+console.log('DISCORD_CHANNELS from env', DISCORD_ANNOUNCEMENT_CHANNELS);
 
 const client = new Client({
     intents: ["Guilds",
@@ -22,7 +20,10 @@ const client = new Client({
 
 
 function isSupportedChannel(channelId: string) {
-    return DISCORD_CHANNELS.includes(channelId);
+    if (!DISCORD_ANSWER_CHANNELS) {
+        return true;
+    }
+    return DISCORD_ANSWER_CHANNELS.includes(channelId);
 }
 
 async function startBot() {
@@ -31,7 +32,7 @@ async function startBot() {
         console.log('client.user', util.inspect(client.user));
 
         client.channels.cache.forEach(async (channel) => {
-            if (isSupportedChannel(channel.id)) {
+            if (DISCORD_ANNOUNCEMENT_CHANNELS?.includes(channel.id)) {
                 const message = await channel.send("Hello, LLM_PLAYGROUND_CHANNEL! I just started up.");
                 message.edit('Hello, LLM_PLAYGROUND_CHANNEL! I just started up. I can edit messages.')
 
@@ -47,7 +48,7 @@ async function startBot() {
     });
     client.on("messageCreate", async message => {
         if (message.author === client.user) return; // Don't respond to messages sent by the bot itself
-        if (!ALLOWED_DISCORD_CHANNELS.includes(message.channelId)) return; // Don't respond to messages sent by the bot itself
+        if (!isSupportedChannel(message.channelId)) return; // Don't respond to messages sent by the bot itself
         const botId = client.user!.id;
         const mentionedBotId = message.mentions.users.has(botId);
         const messageContent = message.content;
@@ -78,6 +79,7 @@ async function startBot() {
                             answerMessage = await message.reply(currentReplyMessage.slice(0, 1996) + ' <->');
                         }
                         await answerMessage.edit(currentReplyMessage + (finished ? '' : ' <->'));
+                        await new Promise((resolve) => setTimeout(resolve, 5000));
                     }
                 } finally {
                     busy = false;
