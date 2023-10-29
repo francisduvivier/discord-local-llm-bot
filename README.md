@@ -1,39 +1,59 @@
-# discord-llm-bot
-connect-and-send-message
+# FastVector
 
-To install dependencies:
+![Python](https://img.shields.io/badge/python-3.9+-blue)
+![License](https://camo.githubusercontent.com/890acbdcb87868b382af9a4b1fac507b9659d9bf/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6c6963656e73652d4d49542d626c75652e737667)
+[![Build](https://github.com/franneck94/Python-Project-Template/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/franneck94/Python-Project-Template/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/franneck94/Python-Project-Template-Eng/branch/master/graph/badge.svg)](https://codecov.io/gh/franneck94/Python-Project-Template-Eng)
+[![Documentation](https://img.shields.io/badge/ref-Documentation-blue)](https://franneck94.github.io/Python-Project-Template-Eng/)
 
-```bash
-bun install
+## Template For Python Projects
+
+This is a template for Python projects. What you get:
+
+- Source code and test code is seperated in different directories.
+- External libraries installed and managed by [Pip](https://pypi.org/project/pip/) and [setuptools](https://setuptools.pypa.io/en/latest/) in a pyproject.toml.
+- Setup for tests using [Pytest](https://docs.pytest.org/en/stable/) and coverage with [Pytest-Cov](https://github.com/pytest-dev/pytest-cov).
+- Continuous testing with [Github-Actions](https://github.com/features/actions/) including [pre-commit](https://github.com/pre-commit/pre-commit).
+- Code coverage reports, including automatic upload to [Codecov](https://codecov.io).
+- Code documentation with [Mkdocs](https://www.mkdocs.org/).
+
+## Structure
+
+``` text
+├── pyproject.toml
+├── ... other config files ...
+├── tests
+│   ├── __init__.py
+│   └── test_vector.py
+├── docs
+│   ├── api.md
+│   └── index.md
+├── fastvector
+│   ├── __init__.py
+│   ├── vector.py
+│   └── version.py
+└── tests
+    ├── __init__.py
+    └── test_vector.py
 ```
 
-To run:
+### Commands
 
 ```bash
-bun run index.ts
+# Build and Install (local)
+pip install -e .  # OR
+pip install -e ../Python-Project-Template  # OR
+pip install -e ../Python-Project-Template[all]
 ```
 
-## Features
-- Uses a local large language model by using [ollama](https://github.com/jmorganca/ollama) via [langchain](https://github.com/langchain-ai/langchainjs).
-- Answers to messages when it's tagged in one of the allowed channels.
-- Posts to a channel when it comes online.
-- Streaming output: takes the streaming output of the LLM and then used the discord edit api to update the message every 5 seconds.
+```bash
+# Test
+pytest tests  # OR
+pytest .  # OR
+pytest
+```
 
-## TODO's
-### Chatty
-- Token output limit to avoid endless response.
-- Provide the sender in the question to the llm and provide a system prompt to inform that it is now the KO-LAB LLM Discord bot.
-- Back and forth conversations
-- Maybe: Move to orange pi using MLC-AI
-  - Remove Ollama depenency
-- Maybe: Provide an api, messages starting with slash should trigger stuff like set temp and set system prompt.
-
-### RAG
-- Internet Browsing
-- Index Whole Discord channel contents and let LLM search through that in it's answers
-  - Find content in the discord channel: Hey @bot find message that talk about large language models. 
-  - Impersonate Discord users: Hey @bot what would @FrancisD say to this question: ...
-- Index the whole Ko-Lab Wiki and allow answering questions about the wiki:
-  - Eg. Hey @bot is there an event on the wiki next friday? Or simpler, is there a project about 3D printing?
-
-This project was created using `bun init` in bun v1.0.1. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+```bash
+# Code Coverage
+pytest --cov=fastvector tests --cov-report=html
+```
