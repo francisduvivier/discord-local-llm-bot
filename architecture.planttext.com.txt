@@ -1,0 +1,17 @@
+@startuml
+!theme black-knight
+
+skin rose
+
+title DiscordBot - Component Diagram
+[init]
+[DiscordBot] as Bot
+[LangChainModel] as LLM
+interface constructor as BotConstructor
+interface constructor as LLMConstructor
+init --( BotConstructor
+Bot -- BotConstructor
+LLM -- LLMConstructor
+Bot --( LLMConstructor
+
+@enduml
