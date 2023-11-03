@@ -48,7 +48,7 @@ async def on_message(message):
         (salute, question)  = re.search(pattern, message.content).groups()
 
         print(f'extracted question: {question}')
-        start_reply = f'{salute}{message.author.name}, '
+        start_reply = f'{salute}<@{message.author.id}>, '
         answer_message = await message.reply(start_reply)
         llm_answer = get_answer(question)
         await answer_message.edit(content=start_reply+llm_answer)
