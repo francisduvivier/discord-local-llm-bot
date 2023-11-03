@@ -10,7 +10,7 @@
 
 This is a template for Python projects. What you get:
 
-- Source code and test code is seperated in different directories.
+- Source code and test code is separated in different directories.
 - External libraries installed and managed by [Pip](https://pypi.org/project/pip/) and [setuptools](https://setuptools.pypa.io/en/latest/) in a pyproject.toml.
 - Setup for tests using [Pytest](https://docs.pytest.org/en/stable/) and coverage with [Pytest-Cov](https://github.com/pytest-dev/pytest-cov).
 - Continuous testing with [Github-Actions](https://github.com/features/actions/) including [pre-commit](https://github.com/pre-commit/pre-commit).
@@ -22,19 +22,15 @@ This is a template for Python projects. What you get:
 ``` text
 ├── pyproject.toml
 ├── ... other config files ...
-├── tests
-│   ├── __init__.py
-│   └── test_vector.py
 ├── docs
 │   ├── api.md
 │   └── index.md
-├── fastvector
+├── langchainOllama
 │   ├── __init__.py
-│   ├── vector.py
-│   └── version.py
+│   ├── ollama.py
 └── tests
     ├── __init__.py
-    └── test_vector.py
+    └── test_langchainOllama.py
 ```
 
 ### Commands
@@ -55,5 +51,5 @@ pytest
 
 ```bash
 # Code Coverage
-pytest --cov=fastvector tests --cov-report=html
+pytest --cov=discordbot tests --cov-report=html
 ```

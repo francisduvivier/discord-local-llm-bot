@@ -1,3 +1,3 @@
-# FastVector
+# Local LLM Discord Bot
 
-This is a simple vector python package.
+This is a Local LLM Discord Bot made for Maker/Hacker Spaces.

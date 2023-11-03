@@ -6,11 +6,11 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "fastvector"
+name = "local-llm-discord-bot"
 authors = [
-    {name = "Jan Schaffranek", email = "email@email.com"},
+    {name = "Francis Duviiver", email = "francisduvivier@gmail.com"},
 ]
-description = "This is a simple vector python package."
+description = "This is a local llm discord bot package made for Maker/Hacker Spaces."
 readme = "README.md"
 license = {file = "LICENSE"}
 requires-python = ">=3.9"
@@ -53,14 +53,14 @@ dev = [
     "pre-commit",
     "ruff",
 ]
-all = ["fastvector[test,doc,dev]"]
+all = ["discordbot[test,doc,dev]"]
 
 [tool.setuptools]
 platforms = ["unix", "linux", "osx", "cygwin", "win32"]
-packages = ["fastvector"]  # optional
+packages = ["discordbot"]  # optional
 
 [tool.setuptools.dynamic]
-version = {attr = "fastvector.__version__"}
+version = {attr = "discordbot.__version__"}
 
 [tool.pytest.ini_options]
 minversion = "7.3"
@@ -71,8 +71,8 @@ branch = true
 parallel = true
 omit = [
     "setup.py",
-    "fastvector/__init__.py",
-    "fastvector/version.py",
+    "discordbot/__init__.py",
+    "discordbot/version.py",
 ]
 
 [tool.coverage.report]
@@ -89,7 +89,7 @@ exclude_lines = [
 
 [tool.coverage.paths]
 source = [
-    "fastvector/*",
+    "discordbot/*",
 ]
 
 [tool.coverage.html]

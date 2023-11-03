@@ -2,4 +2,4 @@
 
 ## Vector Class
 
-::: fastvector.vector
+::: discordbot.ollama
