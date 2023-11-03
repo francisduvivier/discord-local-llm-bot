@@ -1,4 +1,2 @@
 # Runtime requirements
 numpy>=1.21.6
-discord==2.3.2
-pytest==7.4.3

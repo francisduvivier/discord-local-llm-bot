@@ -37,8 +37,10 @@ This is a template for Python projects. What you get:
 
 ```bash
 # Build and Install (local)
-pip install -e .  # OR
-pip install -e ../Python-Project-Template  # OR
+pip install -e .
+## or
+pip install -e ../Python-Project-Template
+## or
 pip install -e ../Python-Project-Template[all]
 ```
 
