@@ -1,66 +1,21 @@
-[build-system]
-requires = [
-    "setuptools",
-    "setuptools-scm",
-]
-build-backend = "setuptools.build_meta"
-
-[project]
-name = "local-llm-discord-bot"
-authors = [
-    {name = "Francis Duviiver", email = "francisduvivier@gmail.com"},
-]
-description = "This is a local llm discord bot package made for Maker/Hacker Spaces."
+[tool.poetry]
+name = "python-discord-llm-bot"
+version = "0.1.0"
+description = "A discord bot made for Hacker/Maker spaces so that they can be assisted by a locally running LLM on discord."
+authors = ["Francis Duvivier <francisduvivier@gmail.com>"]
+license = "LICENSE"
 readme = "README.md"
-license = {file = "LICENSE"}
-requires-python = ">=3.9"
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Operating System :: Microsoft :: Windows",
-    "Operating System :: POSIX :: Linux",
-    "Operating System :: POSIX",
-    "Operating System :: Unix",
-    "Operating System :: MacOS",
-]
-dependencies = [
-    "numpy>=1.21.6; python_version<'3.11'",
-    "numpy>=1.23.2; python_version>='3.11'",
-]
-dynamic = ["version"]
 
-[project.optional-dependencies]
-test = [
-    "pytest",
-    "pytest-cov",
-    "codecov",
-    "pre-commit",
-]
-doc = [
-    "mkdocs",
-    "mkdocstrings",
-    "mkdocstrings[python]",
-    "mkdocs-material",
-    "Pygments",
-]
-dev = [
-    "black",
-    "isort",
-    "mypy",
-    "pre-commit",
-    "ruff",
-]
-all = ["discordbot[test,doc,dev]"]
+[tool.poetry.dependencies]
+python = "^3.11"
+discord = "^2.3.2"
+python-dotenv = "^1.0.0"
+langchain = "^0.0.330"
 
-[tool.setuptools]
-platforms = ["unix", "linux", "osx", "cygwin", "win32"]
-packages = ["discordbot"]  # optional
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
 
-[tool.setuptools.dynamic]
-version = {attr = "discordbot.__version__"}
 
 [tool.pytest.ini_options]
 minversion = "7.3"
@@ -109,7 +64,7 @@ extend-exclude = '''
 '''
 
 [tool.isort]
-py_version = 39
+py_version = 311
 sections = [
     "FUTURE",
     "STDLIB",
@@ -152,7 +107,7 @@ skip_glob = [
 
 [tool.mypy]
 # Platform configuration
-python_version = "3.9"
+python_version = "3.11"
 # imports related
 ignore_missing_imports = true
 follow_imports = "silent"
@@ -213,26 +168,3 @@ convention = "numpy"
 [tool.ruff.flake8-annotations]
 allow-star-arg-any = false
 ignore-fully-untyped = false
-
-[tool.pyright]
-pythonVersion = "3.9"
-typeCheckingMode = "basic"
-# enable subset of "strict"
-reportDuplicateImport = true
-reportInvalidStubStatement = true
-reportOverlappingOverload = true
-reportPropertyTypeMismatch = true
-reportUntypedClassDecorator = true
-reportUntypedFunctionDecorator = true
-reportUntypedNamedTuple = true
-reportUnusedImport = true
-# disable subset of "basic"
-reportGeneralTypeIssues = false
-reportMissingModuleSource = false
-reportOptionalCall = false
-reportOptionalIterable = false
-reportOptionalMemberAccess = false
-reportOptionalOperand = false
-reportOptionalSubscript = false
-reportPrivateImportUsage = false
-reportUnboundVariable = false
