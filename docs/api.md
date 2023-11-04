@@ -1,5 +1,4 @@
 # References
 
-## Vector Class
-
-::: discordbot.ollama
+## cli
+```python discordbot/bot.py```
