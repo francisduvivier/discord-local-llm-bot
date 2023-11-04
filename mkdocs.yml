@@ -1,8 +1,8 @@
 site_name: LocalLLMDiscordBot
 site_description: "This is a local llm discord bot package made for Maker/Hacker Spaces."
 
-repo_url: https://github.com/franneck94/Python-Project-Template
-repo_name: franneck94/Python-Project-Template
+repo_url: https://github.com/francisduvivier/discord-local-llm-bot
+repo_name: francisduvivier/discord-local-llm-bot
 
 theme:
   icon:
