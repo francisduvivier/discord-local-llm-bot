@@ -37,7 +37,7 @@ async def on_ready():
                 startupAnnouncement = "Local LLM Discord Bot starting up ..."
                 message = await channel.send(startupAnnouncement)
                 await message.edit(content=startupAnnouncement + '\nEdit: Model says: ' + get_answer(
-                    'You are a discord bot on an awesome Maker Space discord guild, write a startup message to announce your presence in the channel.'))
+                    'You are a discord bot on an awesome Maker Space Discord guild, write a startup message to announce your presence in the channel.'))
 
 
 @bot.event
