@@ -1,4 +1,4 @@
-# FastVector
+# Local LLM Discord Bot for Hacker Spaces
 
 ![Python](https://img.shields.io/badge/python-3.9+-blue)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
