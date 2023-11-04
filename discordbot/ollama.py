@@ -7,9 +7,10 @@ chat_model = ChatOllama(
     callback_manager=CallbackManager([StreamingStdOutCallbackHandler()]),
 )
 
-def get_answer(question):
+
+def get_answer(question, temperature=0.8):
     try:
-       result = chat_model.predict(question)
-       return result
+        result = chat_model.predict(question, temperature=temperature)
+        return result
     finally:
-       pass
+        pass

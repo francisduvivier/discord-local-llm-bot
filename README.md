@@ -44,13 +44,10 @@ pip install -e ../Python-Project-Template[all]
 ```
 
 ```bash
-# Test
-pytest tests  # OR
-pytest .  # OR
-pytest
+python -m pytest
 ```
 
 ```bash
 # Code Coverage
-pytest --cov=discordbot tests --cov-report=html
+python -m pytest --cov=discordbot tests --cov-report=html
 ```
