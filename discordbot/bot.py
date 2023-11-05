@@ -1,11 +1,12 @@
 import os
 import discord
 from discord.ext import commands
-from dotenv import load_dotenv
-from ollama import get_answer
+import dotenv
 import re
 
-load_dotenv()
+from discordbot import model_manager
+
+dotenv.load_dotenv()
 DISCORD_BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
 DISCORD_ANNOUNCEMENT_CHANNELS = os.getenv('DISCORD_ANNOUNCEMENT_CHANNELS').split(',') if os.getenv(
     'DISCORD_ANNOUNCEMENT_CHANNELS') else []
@@ -36,8 +37,9 @@ async def on_ready():
             if channel.id in DISCORD_ANNOUNCEMENT_CHANNELS:
                 startupAnnouncement = "Local LLM Discord Bot starting up ..."
                 message = await channel.send(startupAnnouncement)
-                await message.edit(content=startupAnnouncement + '\nEdit: Model says: ' + get_answer(
-                    'You are a discord bot on an awesome Maker Space Discord guild, write a startup message to announce your presence in the channel.'))
+                llm_response = model_manager.predict(
+                    'You are a discord bot on an awesome Maker Space Discord guild, write a startup message to announce your presence in the channel.')
+                await message.edit(content=startupAnnouncement + '\nEdit: Model says: ' + llm_response)
 
 
 @bot.event
@@ -57,8 +59,12 @@ async def on_message(message):
         print(f'extracted question: {question}')
         start_reply = f'{salute}<@{message.author.id}>, '
         answer_message = await message.reply(start_reply)
-        llm_answer = get_answer(question)
+        llm_answer = predict(question)
         await answer_message.edit(content=start_reply + llm_answer)
 
 
-bot.run(DISCORD_BOT_TOKEN)
+def main():
+    bot.run(DISCORD_BOT_TOKEN)
+
+if __name__ == "__main__":
+    main()

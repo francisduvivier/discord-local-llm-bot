@@ -7,7 +7,7 @@ import discordbot
 
 def main() -> None:
     """Main function."""
-    print(discordbot.ollama.get_answer('Say hi'))
+    print(discordbot.ollama.predict('Say hi'))
 
 if __name__ == "__main__":
     main()

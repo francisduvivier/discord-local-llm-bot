@@ -142,3 +142,6 @@ venv.bak/
 ########### Intellij IDE's ############
 ################################
 .idea
+
+## Custom ignored files
+*.ignorethis.*
