@@ -11,6 +11,7 @@ import re
 from langchain.schema.messages import BaseMessageChunk, BaseMessage
 
 from discordbot import model_manager
+from discordbot.memory_manager import get_message_history
 
 dotenv.load_dotenv()
 DISCORD_BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
@@ -54,10 +55,6 @@ async def on_ready():
                     await add_response_streaming(announcement_message, streaming_llm_response, startup_announcement)
 
 
-def get_message_history(message: discord.message.Message) -> List[BaseMessage]:
-    pass
-
-
 @bot.event
 async def on_message(message: discord.message.Message):
     if message.author == bot.user:
@@ -75,7 +72,8 @@ async def on_message(message: discord.message.Message):
         response_prefix = f'{salute}<@{message.author.id}>, '
         print(f'extracted question: {question}')
         async with message.channel.typing():
-            streaming_llm_response = model_manager.stream(question, get_message_history(message))
+            message_history = await get_message_history(message)
+            streaming_llm_response = model_manager.stream(question, message_history)
             answer_message = await message.reply(response_prefix)
             await add_response_streaming(answer_message, streaming_llm_response, response_prefix)
 
