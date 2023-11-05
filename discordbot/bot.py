@@ -1,6 +1,7 @@
 import io
 import os
 import time
+from typing import Any
 
 import discord
 from discord.ext import commands
@@ -17,7 +18,8 @@ DISCORD_ANNOUNCEMENT_CHANNELS = list(map(int, DISCORD_ANNOUNCEMENT_CHANNELS))
 DISCORD_ANSWER_CHANNELS = os.getenv('DISCORD_ANSWER_CHANNELS').split(',') if os.getenv(
     'DISCORD_ANSWER_CHANNELS') else []
 DISCORD_ANSWER_CHANNELS = list(map(int, DISCORD_ANSWER_CHANNELS))
-DISCORD_MESSSAGE_UPDATE_INTERVAL= int(os.getenv('DISCORD_MESSSAGE_UPDATE_INTERVAL')) if os.getenv('DISCORD_MESSSAGE_UPDATE_INTERVAL') else 5
+DISCORD_MESSSAGE_UPDATE_INTERVAL = int(os.getenv('DISCORD_MESSSAGE_UPDATE_INTERVAL')) if os.getenv(
+    'DISCORD_MESSSAGE_UPDATE_INTERVAL') else 5
 
 intents = discord.Intents.default()
 intents.guilds = True
@@ -47,7 +49,7 @@ async def on_ready():
 
 
 @bot.event
-async def on_message(message):
+async def on_message(message: discord.message.Message):
     if message.author == bot.user:
         return
 
@@ -60,25 +62,37 @@ async def on_message(message):
         pattern = '(?P<salute>[^@]*)<@.*>[^a-zA-Z]*(?P<question>.*)'
         (salute, question) = re.search(pattern, message.content).groups()
 
+        response_prefix = f'{salute}<@{message.author.id}>, '
         print(f'extracted question: {question}')
-        start_reply = f'{salute}<@{message.author.id}>, '
-        answer_message = await message.reply(start_reply)
-        message_buffer = io.StringIO()
-        message_buffer.write(start_reply)
-        start_time = time.time()
-        last_updated_time = start_time
-        for chunk in model_manager.stream(question):
-            message_buffer.write(str(chunk.content))
-            if(time.time() - last_updated_time) > DISCORD_MESSSAGE_UPDATE_INTERVAL:
-                last_updated_time = time.time()
-                print('updating answer via edit call')
-                await answer_message.edit(content=message_buffer.getvalue())
-        await answer_message.edit(content=message_buffer.getvalue())
-        print('\nDone answering.')
+        streaming_llm_response = model_manager.stream(question)
+        await reply_to_message_streaming(message, streaming_llm_response, response_prefix)
+
+
+async def reply_to_message_streaming(message: discord.message.Message, streaming_llm_response, response_prefix) -> Any:
+    """
+
+    :param message:
+    :param streaming_llm_response:
+    """
+
+    message_buffer = io.StringIO()
+    message_buffer.write(response_prefix)
+    answer_message = await message.reply(message_buffer.getvalue())
+    start_time = time.time()
+    last_updated_time = start_time
+    for chunk in streaming_llm_response:
+        message_buffer.write(str(chunk.content))
+        if (time.time() - last_updated_time) > DISCORD_MESSSAGE_UPDATE_INTERVAL:
+            last_updated_time = time.time()
+            print('updating answer via edit call')
+            await answer_message.edit(content=message_buffer.getvalue())
+    await answer_message.edit(content=message_buffer.getvalue())
+    print('\nDone answering.')
 
 
 def main():
     bot.run(DISCORD_BOT_TOKEN)
+
 
 if __name__ == "__main__":
     main()
