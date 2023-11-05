@@ -60,18 +60,18 @@ python -m pytest --cov=discordbot tests --cov-report=html
 - Posts to a channel when it comes online.
 - Streaming output: takes the streaming output of the LLM and then uses the discord edit api to update the message every 5 seconds.
 - Configurable via a .env file
+- Supports back and forth conversations via replies to messages.
+- Supports going further on previous human questions by answering to those.
 
 ## TODO's
 ### Chatty
-- Provide the sender in the question to the llm.
-- Back and forth conversations
 - Maybe: Move to orange pi using MLC-AI
-  - Remove Ollama depenency
+  - Remove Ollama dependency
 - Maybe: Provide an api, messages starting with slash should trigger stuff like set temp and set system prompt.
 
 ### RAG
 - Internet Browsing
-- Index Whole Discord channel contents and let LLM search through that in it's answers
+- Index Whole Discord channel contents and let LLM search through that in its answers
   - Find content in the discord channel: Hey @bot find message that talk about large language models. 
   - Impersonate Discord users: Hey @bot what would @FrancisD say to this question: ...
 - Index the whole Ko-Lab Wiki and allow answering questions about the wiki:
