@@ -4,7 +4,7 @@ from typing import Iterator
 
 import dotenv
 from langchain.callbacks import StreamingStdOutCallbackHandler
-from langchain.schema.messages import BaseMessageChunk
+from langchain.schema.messages import BaseMessageChunk, HumanMessage, SystemMessage
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 from discordbot import ollama_config as model_config
@@ -33,11 +33,11 @@ def stream(question: str) -> Iterator[BaseMessageChunk]:
         callbacks = [StreamingStdOutCallbackHandler()]
     llm = model_config.get_model(callbacks)
     prompt = ChatPromptTemplate.from_messages([
-        ('system', SYSTEM_PROMPT),
+        SystemMessage(content=SYSTEM_PROMPT),
         MessagesPlaceholder(variable_name='history'),
-        ('human', '{input}'),
+        HumanMessage(content=question),
     ])
-    return llm.stream(prompt.format(input=question, history=[]))
+    return llm.stream(prompt.format(history=[]))
 
 
 if __name__ == '__main__':
