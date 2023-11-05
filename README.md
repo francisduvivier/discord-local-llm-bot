@@ -5,7 +5,11 @@
 [![Build](https://github.com/francisduvivier/discord-local-llm-bot/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/francisduvivier/discord-local-llm-bot/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/francisduvivier/discord-local-llm-bot/branch/master/graph/badge.svg)](https://codecov.io/gh/francisduvivier/discord-local-llm-bot)
 
-### Commands
+## Commands
+```bash
+# run the bot
+python discordbot
+```
 
 ```bash
 # Build and Install (local)
@@ -13,6 +17,7 @@ pip install -e .
 ```
 
 ```bash
+# test
 python -m pytest
 ```
 
@@ -22,15 +27,14 @@ python -m pytest --cov=discordbot tests --cov-report=html
 ```
 
 ## Features
-- Built using discordjs and langchain.js
+- Built using the discord and langchain python libraries
 - Uses a local large language model by using [ollama](https://github.com/jmorganca/ollama) via [langchain](https://github.com/langchain-ai/langchainjs).
 - Answers to messages when it's tagged in one of the allowed channels.
 - Posts to a channel when it comes online.
-- Streaming output: takes the streaming output of the LLM and then used the discord edit api to update the message every 5 seconds.
+- Streaming output: takes the streaming output of the LLM and then uses the discord edit api to update the message every 5 seconds.
+- Configurable via a .env file
 
 ## TODO's
-### Language
-- Move to Python: Discord.js typing and documentation sucks and everything related to data and AI is better in Python, so first priority is to refactor to Python.
 ### Chatty
 - Token output limit to avoid endless response.
 - Provide the sender in the question to the llm and provide a system prompt to inform that it is now the KO-LAB LLM Discord bot.

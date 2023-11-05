@@ -2,7 +2,6 @@ import io
 import os
 
 import dotenv
-from langchain.callbacks import AsyncIteratorCallbackHandler
 from langchain.callbacks import StreamingStdOutCallbackHandler
 
 from discordbot import ollama_config as model_config
