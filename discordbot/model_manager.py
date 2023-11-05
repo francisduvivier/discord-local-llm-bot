@@ -25,8 +25,9 @@ async def apredict_with_errorlog(llm, question):
     print('apredict_with_errorlog call received')
     try:
         await llm.apredict(question)
-    except:
+    except Exception as e:
         print('EXCEPTION in predict')
+        print(e)
     pass
 
 
@@ -42,4 +43,4 @@ def predict_streaming(question):
 
 
 if __name__ == '__main__':
-    asyncio.run(predict('Answer with "Hello world"', 0))
+    asyncio.run(predict('Answer with "Hello world"'))

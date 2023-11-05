@@ -34,4 +34,7 @@ def get_model(callbacks: List[BaseCallbackHandler] | None = None) -> LLM:
 if __name__ == "__main__":
     from langchain.callbacks import StreamingStdOutCallbackHandler
     # TODO make this usable as a chat model
-    print(get_model(callbacks=[StreamingStdOutCallbackHandler()]).predict('<HUMAN>Say hi\n<BOT>', temperature=0))
+    import asyncio
+
+    llama_cpp_model = get_model(callbacks=[StreamingStdOutCallbackHandler()])
+    asyncio.run(llama_cpp_model.apredict('<HUMAN>Say hi\n<BOT>', temperature=0))
