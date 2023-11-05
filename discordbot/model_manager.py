@@ -1,12 +1,11 @@
 import io
 import os
-from typing import Iterator, List
-
 import dotenv
+from typing import Iterator, List
 from langchain.callbacks import StreamingStdOutCallbackHandler
 from langchain.schema.messages import BaseMessageChunk, HumanMessage, SystemMessage, BaseMessage
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
-
+from langchain.globals import set_debug
 from discordbot import ollama_config as model_config
 
 dotenv.load_dotenv()
@@ -14,6 +13,8 @@ VERBOSE_DEBUG = os.getenv('VERBOSE_DEBUG') is not None
 DEBUG_STREAMING = os.getenv('DEBUG_STREAMING') is not None
 SYSTEM_PROMPT = os.getenv('SYSTEM_PROMPT') if os.getenv(
     'SYSTEM_PROMPT') else 'You are a funny bot on an awesome Maker Space Discord guild.'
+
+set_debug(VERBOSE_DEBUG)
 
 
 def predict(question: str) -> str:
@@ -28,18 +29,17 @@ def predict(question: str) -> str:
 
 
 def stream(question: str, message_history: List[BaseMessage] = None) -> Iterator[BaseMessageChunk]:
-    if message_history is None:
-        message_history = []
     callbacks = None
     if VERBOSE_DEBUG:
         callbacks = [StreamingStdOutCallbackHandler()]
     llm = model_config.get_model(callbacks)
-    prompt = ChatPromptTemplate.from_messages([
+    messages = [
         SystemMessage(content=SYSTEM_PROMPT),
-        MessagesPlaceholder(variable_name='history'),
-        HumanMessage(content=question),
-    ])
-    return llm.stream(prompt.format(history=message_history))
+    ]
+    if message_history is not None:
+        messages.append(MessagesPlaceholder(history=message_history).format(history=message_history))
+    messages.append(HumanMessage(content=question))
+    return llm.stream(messages, verbose=VERBOSE_DEBUG)
 
 
 if __name__ == '__main__':
