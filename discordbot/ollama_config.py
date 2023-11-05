@@ -28,8 +28,7 @@ def get_model(callbacks: List[BaseCallbackHandler] | None = None):
 
 
 if __name__ == "__main__":
-    from langchain.callbacks import StreamingStdOutCallbackHandler
-    result = get_model(callbacks=[StreamingStdOutCallbackHandler()]).predict('Say hi')
-    print('\nreceived result:')
-    print(result)
-
+    result = get_model(
+    ).stream('Say hi')
+    for chunk in result:
+        print('chunk: ' + str(chunk.content))

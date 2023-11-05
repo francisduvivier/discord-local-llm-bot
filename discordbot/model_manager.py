@@ -1,4 +1,3 @@
-import asyncio
 import io
 import os
 
@@ -10,37 +9,27 @@ from discordbot import ollama_config as model_config
 
 dotenv.load_dotenv()
 VERBOSE_DEBUG = os.getenv('VERBOSE_DEBUG') is not None
+DEBUG_STREAMING = os.getenv('DEBUG_STREAMING') is not None
 
 
-async def predict(question):
+def predict(question):
     # create stringbuffer
     string_buffer = io.StringIO()
-    async for token in predict_streaming(question):
-        if VERBOSE_DEBUG: print('predicted token: ' + token)
-        string_buffer.write(token)
+    for chunk in stream(question):
+        content = str(chunk.content)
+        if VERBOSE_DEBUG and DEBUG_STREAMING: print(content, end='')
+        string_buffer.write(content)
+    print('\n Streaming finished.')
     return string_buffer.getvalue()
 
 
-async def apredict_with_errorlog(llm, question):
-    print('apredict_with_errorlog call received')
-    try:
-        await llm.apredict(question)
-    except Exception as e:
-        print('EXCEPTION in predict')
-        print(e)
-    pass
-
-
-def predict_streaming(question):
-    print('predict_streaming called with question: ' + question)
-    async_iterator = AsyncIteratorCallbackHandler()
-    llm = model_config.get_model([
-        StreamingStdOutCallbackHandler(),
-        async_iterator,
-    ])
-    asyncio.create_task(apredict_with_errorlog(llm, question))
-    return async_iterator.aiter()
+def stream(question):
+    callbacks = None
+    if VERBOSE_DEBUG:
+        callbacks = [StreamingStdOutCallbackHandler()]
+    llm = model_config.get_model(callbacks)
+    return llm.stream(question)
 
 
 if __name__ == '__main__':
-    asyncio.run(predict('Answer with "Hello world"'))
+    print('full result:', predict('Write 5 original short lines of text about a topic of your liking.'))

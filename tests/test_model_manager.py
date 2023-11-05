@@ -9,10 +9,9 @@ import discordbot
         ("Say the word 'ok'", "ok")
     ),
 )
-@pytest.mark.asyncio
-async def test_llm_responses(input: str, expected_output_part: str) -> None:
+def test_llm_responses(input: str, expected_output_part: str) -> None:
     """Test from values."""
-    result = await discordbot.predict(input, 0)
+    result = discordbot.predict(input)
     assert expected_output_part in result.lower()
 
 
@@ -23,15 +22,14 @@ async def test_llm_responses(input: str, expected_output_part: str) -> None:
         ("Repeat the words 'ok then'", "ok then")
     ),
 )
-@pytest.mark.asyncio
-async def test_llm_responses_stream(input: str, expected_output_part: str) -> None:
+def test_llm_responses_stream(input: str, expected_output_part: str) -> None:
     """Test from values."""
     result = []
-    streaming = discordbot.predict_streaming(input)
+    streaming = discordbot.stream(input)
     parts = 0
-    async for part in streaming:
+    for part in streaming:
         parts = parts + 1
-        result.append(part)
+        result.append(str(part.content))
 
     resultString = ''.join(result)
     assert parts >= 2
