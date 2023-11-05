@@ -17,7 +17,7 @@ The only thing that is really really required in you environment is the the bot 
 I followed this guide for that: https://www.ionos.com/digitalguide/server/know-how/creating-discord-bot/
 
 ### Optional environment variables
-#### BOT_TITLE=Maky, The Maker Space LLM Discord Bot
+#### BOT_TITLE=MakerMate, The Maker Space LLM Discord Bot
 #### DISCORD_ANNOUNCEMENT_CHANNELS=1163955919164551300
 Comma separated list of channels where the bot should announce itself every time that it starts up. If not set, it doesn't announce itself at startup.
 #### DISCORD_ANSWER_CHANNELS=
