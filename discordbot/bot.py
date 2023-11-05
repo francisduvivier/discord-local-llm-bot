@@ -3,10 +3,13 @@ import dotenv
 import io
 import os
 import time
-from typing import Any
+from typing import Any, Iterator, List
 import discord
 from discord.ext import commands
 import re
+
+from langchain.schema.messages import BaseMessageChunk, BaseMessage
+
 from discordbot import model_manager
 
 dotenv.load_dotenv()
@@ -49,6 +52,10 @@ async def on_ready():
                     await add_response_streaming(announcement_message, streaming_llm_response, startup_announcement)
 
 
+def get_message_history(message: discord.message.Message) -> List[BaseMessage]:
+    pass
+
+
 @bot.event
 async def on_message(message: discord.message.Message):
     if message.author == bot.user:
@@ -66,13 +73,14 @@ async def on_message(message: discord.message.Message):
         response_prefix = f'{salute}<@{message.author.id}>, '
         print(f'extracted question: {question}')
         async with message.channel.typing():
-            streaming_llm_response = model_manager.stream(question)
+            streaming_llm_response = model_manager.stream(question, get_message_history(message))
             answer_message = await message.reply(response_prefix)
             await add_response_streaming(answer_message, streaming_llm_response, response_prefix)
 
 
-async def add_response_streaming(bot_message: discord.message.Message, streaming_llm_response,
-                                 response_prefix) -> Any:
+async def add_response_streaming(bot_message: discord.message.Message,
+                                 streaming_llm_response: Iterator[BaseMessageChunk],
+                                 response_prefix: str) -> Any:
     """
 
     :param bot_message:
