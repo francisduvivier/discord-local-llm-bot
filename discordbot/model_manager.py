@@ -37,7 +37,7 @@ def stream(question: str, message_history: List[BaseMessage] = None) -> Iterator
         SystemMessage(content=SYSTEM_PROMPT),
     ]
     if message_history is not None:
-        messages.append(MessagesPlaceholder(history=message_history).format(history=message_history))
+        messages.extend(message_history)
     messages.append(HumanMessage(content=question))
     return llm.stream(messages, verbose=VERBOSE_DEBUG)
 
