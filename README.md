@@ -1,16 +1,24 @@
-# discord-llm-bot
-connect-and-send-message
+# Local LLM Discord Bot for Hacker Spaces
 
-To install dependencies:
+![Python](https://img.shields.io/badge/python-3.11+-blue)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build](https://github.com/francisduvivier/discord-local-llm-bot/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/francisduvivier/discord-local-llm-bot/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/francisduvivier/discord-local-llm-bot/branch/master/graph/badge.svg)](https://codecov.io/gh/francisduvivier/discord-local-llm-bot)
+
+### Commands
 
 ```bash
-bun install
+# Build and Install (local)
+pip install -e .
 ```
 
-To run:
+```bash
+python -m pytest
+```
 
 ```bash
-bun run index.ts
+# Code Coverage
+python -m pytest --cov=discordbot tests --cov-report=html
 ```
 
 ## Features
@@ -38,5 +46,3 @@ bun run index.ts
   - Impersonate Discord users: Hey @bot what would @FrancisD say to this question: ...
 - Index the whole Ko-Lab Wiki and allow answering questions about the wiki:
   - Eg. Hey @bot is there an event on the wiki next friday? Or simpler, is there a project about 3D printing?
-
-This project was created using `bun init` in bun v1.0.1. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
