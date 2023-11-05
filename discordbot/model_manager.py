@@ -1,8 +1,10 @@
 import io
 import os
+from typing import Iterator
 
 import dotenv
 from langchain.callbacks import StreamingStdOutCallbackHandler
+from langchain.schema.messages import BaseMessageChunk
 
 from discordbot import ollama_config as model_config
 
@@ -11,7 +13,7 @@ VERBOSE_DEBUG = os.getenv('VERBOSE_DEBUG') is not None
 DEBUG_STREAMING = os.getenv('DEBUG_STREAMING') is not None
 
 
-def predict(question):
+def predict(question: str) -> str:
     # create stringbuffer
     string_buffer = io.StringIO()
     for chunk in stream(question):
@@ -22,7 +24,7 @@ def predict(question):
     return string_buffer.getvalue()
 
 
-def stream(question):
+def stream(question: str) -> Iterator[BaseMessageChunk]:
     callbacks = None
     if VERBOSE_DEBUG:
         callbacks = [StreamingStdOutCallbackHandler()]
