@@ -4,7 +4,6 @@ import dotenv
 from typing import Iterator, List
 from langchain.callbacks import StreamingStdOutCallbackHandler
 from langchain.schema.messages import BaseMessageChunk, HumanMessage, SystemMessage, BaseMessage
-from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.globals import set_debug
 from discordbot import ollama_config as model_config
 
