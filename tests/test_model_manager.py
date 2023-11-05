@@ -1,6 +1,5 @@
 import pytest
-import discordbot
-
+from discordbot import model_manager
 
 @pytest.mark.parametrize(
     ("input", "expected_output_part"),
@@ -11,7 +10,7 @@ import discordbot
 )
 def test_llm_responses(input: str, expected_output_part: str) -> None:
     """Test from values."""
-    result = discordbot.predict(input)
+    result = model_manager.predict(input)
     assert expected_output_part in result.lower()
 
 
@@ -25,7 +24,7 @@ def test_llm_responses(input: str, expected_output_part: str) -> None:
 def test_llm_responses_stream(input: str, expected_output_part: str) -> None:
     """Test from values."""
     result = []
-    streaming = discordbot.stream(input)
+    streaming = model_manager.stream(input)
     parts = 0
     for part in streaming:
         parts = parts + 1
