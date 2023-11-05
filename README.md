@@ -17,6 +17,7 @@ The only thing that is really really required in you environment is the the bot 
 I followed this guide for that: https://www.ionos.com/digitalguide/server/know-how/creating-discord-bot/
 
 ### Optional environment variables
+#### BOT_TITLE=MakerMate, The Maker Space LLM Discord Bot
 #### DISCORD_ANNOUNCEMENT_CHANNELS=1163955919164551300
 Comma separated list of channels where the bot should announce itself every time that it starts up. If not set, it doesn't announce itself at startup.
 #### DISCORD_ANSWER_CHANNELS=
@@ -24,7 +25,7 @@ Comma separated list of channels where the bot is allowed to answer. If not set,
 #### MODEL=mistral
 The ollama model to use. Not that this model already needs to be pulled and that ollama needs to already be running on your system
 #### VERBOSE_DEBUG=False
-
+#### SYSTEM_PROMPT=You are a funny bot on an awesome Maker Space Discord guild.
 ### Commands
 
 ```bash
@@ -59,18 +60,18 @@ python -m pytest --cov=discordbot tests --cov-report=html
 - Posts to a channel when it comes online.
 - Streaming output: takes the streaming output of the LLM and then uses the discord edit api to update the message every 5 seconds.
 - Configurable via a .env file
+- Supports back and forth conversations via replies to messages.
+- Supports going further on previous human questions by answering to those.
 
 ## TODO's
 ### Chatty
-- Provide the sender in the question to the llm and provide a system prompt to inform that it is now the KO-LAB LLM Discord bot.
-- Back and forth conversations
 - Maybe: Move to orange pi using MLC-AI
-  - Remove Ollama depenency
+  - Remove Ollama dependency
 - Maybe: Provide an api, messages starting with slash should trigger stuff like set temp and set system prompt.
 
 ### RAG
 - Internet Browsing
-- Index Whole Discord channel contents and let LLM search through that in it's answers
+- Index Whole Discord channel contents and let LLM search through that in its answers
   - Find content in the discord channel: Hey @bot find message that talk about large language models. 
   - Impersonate Discord users: Hey @bot what would @FrancisD say to this question: ...
 - Index the whole Ko-Lab Wiki and allow answering questions about the wiki:
