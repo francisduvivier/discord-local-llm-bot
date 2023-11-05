@@ -11,8 +11,9 @@ from discordbot import ollama_config as model_config
 dotenv.load_dotenv()
 VERBOSE_DEBUG = os.getenv('VERBOSE_DEBUG') is not None
 DEBUG_STREAMING = os.getenv('DEBUG_STREAMING') is not None
+BOT_TITLE = os.getenv('BOT_TITLE') if os.getenv('BOT_TITLE') else 'Maky, The Maker Space LLM Discord Bot'
 SYSTEM_PROMPT = os.getenv('SYSTEM_PROMPT') if os.getenv(
-    'SYSTEM_PROMPT') else 'You are a funny bot on an awesome Maker Space Discord guild.'
+    'SYSTEM_PROMPT') else f'Your Title is {BOT_TITLE}, You are a funny bot on an awesome Maker Space Discord guild.'
 
 set_debug(VERBOSE_DEBUG)
 

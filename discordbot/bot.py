@@ -23,13 +23,15 @@ DISCORD_ANSWER_CHANNELS = list(map(int, DISCORD_ANSWER_CHANNELS))
 DISCORD_MESSSAGE_UPDATE_INTERVAL = int(os.getenv('DISCORD_MESSSAGE_UPDATE_INTERVAL')) if os.getenv(
     'DISCORD_MESSSAGE_UPDATE_INTERVAL') else 5
 DISCORD_CHAR_LIMIT = int(os.getenv('DISCORD_CHAR_LIMIT')) if os.getenv('DISCORD_CHAR_LIMIT') else 2000
-MAX_INFERENCE_DURATION_SECONDS = int(os.getenv('MAX_INFERENCE_DURATION_SECONDS')) if os.getenv(
-    'MAX_INFERENCE_DURATION_SECONDS') else 600  # 10 minutes by default
+MAX_INFERENCE_DURATION_SECONDS = int(os.getenv('MAX_INFERENCE_DURATION_SECONDS')) \
+    if os.getenv('MAX_INFERENCE_DURATION_SECONDS') else 600  # 10 minutes by default
+
 intents = discord.Intents.default()
 intents.guilds = True
 intents.messages = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
+BOT_TITLE = model_manager.BOT_TITLE
 
 
 def is_supported_channel(channel_id):
@@ -46,9 +48,9 @@ async def on_ready():
         for channel in guild.channels:
             if channel.id in DISCORD_ANNOUNCEMENT_CHANNELS:
                 async with channel.typing():
-                    startup_announcement = "Local LLM Discord Bot starting up ...\n"
+                    startup_announcement = BOT_TITLE + " is starting up...\n"
                     announcement_message = await channel.send(startup_announcement)
-                    streaming_llm_response = model_manager.stream('Please announce your presence here in the channel')
+                    streaming_llm_response = model_manager.stream('Please announce your presence here in the channel.')
                     await add_response_streaming(announcement_message, streaming_llm_response, startup_announcement)
 
 
