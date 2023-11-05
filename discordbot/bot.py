@@ -20,8 +20,8 @@ DISCORD_ANNOUNCEMENT_CHANNELS = list(map(int, DISCORD_ANNOUNCEMENT_CHANNELS))
 DISCORD_ANSWER_CHANNELS = os.getenv('DISCORD_ANSWER_CHANNELS').split(',') if os.getenv(
     'DISCORD_ANSWER_CHANNELS') else []
 DISCORD_ANSWER_CHANNELS = list(map(int, DISCORD_ANSWER_CHANNELS))
-DISCORD_MESSSAGE_UPDATE_INTERVAL = int(os.getenv('DISCORD_MESSSAGE_UPDATE_INTERVAL')) if os.getenv(
-    'DISCORD_MESSSAGE_UPDATE_INTERVAL') else 5
+DISCORD_MESSAGE_UPDATE_INTERVAL = int(os.getenv('DISCORD_MESSAGE_UPDATE_INTERVAL')) if os.getenv(
+    'DISCORD_MESSAGE_UPDATE_INTERVAL') else 5
 DISCORD_CHAR_LIMIT = int(os.getenv('DISCORD_CHAR_LIMIT')) if os.getenv('DISCORD_CHAR_LIMIT') else 2000
 MAX_INFERENCE_DURATION_SECONDS = int(os.getenv('MAX_INFERENCE_DURATION_SECONDS')) \
     if os.getenv('MAX_INFERENCE_DURATION_SECONDS') else 600  # 10 minutes by default
@@ -99,7 +99,7 @@ async def add_response_streaming(bot_message: discord.message.Message,
         if (time.time() - start_time) > MAX_INFERENCE_DURATION_SECONDS:
             timeout_reached = True
             message_buffer.write('\nTimeout reached after ' + str(time.time() - start_time) + ' seconds.')
-        if (time.time() - last_updated_time) > DISCORD_MESSSAGE_UPDATE_INTERVAL:
+        if (time.time() - last_updated_time) > DISCORD_MESSAGE_UPDATE_INTERVAL:
             last_updated_time = time.time()
             print('updating answer via edit call')
             new_content = message_buffer.getvalue()
