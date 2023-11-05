@@ -1,10 +1,10 @@
 import io
 import os
-from typing import Iterator
+from typing import Iterator, List
 
 import dotenv
 from langchain.callbacks import StreamingStdOutCallbackHandler
-from langchain.schema.messages import BaseMessageChunk, HumanMessage, SystemMessage
+from langchain.schema.messages import BaseMessageChunk, HumanMessage, SystemMessage, BaseMessage
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 from discordbot import ollama_config as model_config
@@ -27,7 +27,9 @@ def predict(question: str) -> str:
     return string_buffer.getvalue()
 
 
-def stream(question: str) -> Iterator[BaseMessageChunk]:
+def stream(question: str, message_history: List[BaseMessage] = None) -> Iterator[BaseMessageChunk]:
+    if message_history is None:
+        message_history = []
     callbacks = None
     if VERBOSE_DEBUG:
         callbacks = [StreamingStdOutCallbackHandler()]
@@ -37,7 +39,7 @@ def stream(question: str) -> Iterator[BaseMessageChunk]:
         MessagesPlaceholder(variable_name='history'),
         HumanMessage(content=question),
     ])
-    return llm.stream(prompt.format(history=[]))
+    return llm.stream(prompt.format(history=message_history))
 
 
 if __name__ == '__main__':
