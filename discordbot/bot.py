@@ -1,3 +1,5 @@
+import dotenv
+dotenv.load_dotenv()
 import io
 import os
 import time
@@ -5,12 +7,10 @@ from typing import Any
 
 import discord
 from discord.ext import commands
-import dotenv
 import re
 
 from discordbot import model_manager
 
-dotenv.load_dotenv()
 DISCORD_BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
 DISCORD_ANNOUNCEMENT_CHANNELS = os.getenv('DISCORD_ANNOUNCEMENT_CHANNELS').split(',') if os.getenv(
     'DISCORD_ANNOUNCEMENT_CHANNELS') else []
