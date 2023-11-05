@@ -19,7 +19,7 @@ def test_llm_responses(input: str, expected_output_part: str) -> None:
     ("input", "expected_output_part"),
     (
         ("Say the word 'hi'", "hi"),
-        ("Repeat the words 'ok then'", "ok then")
+        ("Repeat the words 'ok then' one time.", "ok then")
     ),
 )
 def test_llm_responses_stream(input: str, expected_output_part: str) -> None:
