@@ -43,12 +43,10 @@ async def on_ready():
         for channel in guild.channels:
             if channel.id in DISCORD_ANNOUNCEMENT_CHANNELS:
                 async with channel.typing():
-                    startup_announcement = "Local LLM Discord Bot starting up ..."
-                    message = await channel.send(startup_announcement)
-                    llm_response = model_manager.predict(
-                        'You are a discord bot on an awesome Maker Space Discord guild, write a startup message to '
-                        'announce your presence in the channel.')
-                    await message.edit(content=startup_announcement + '\nEdit: Model says: ' + llm_response)
+                    startup_announcement = "Local LLM Discord Bot starting up ...\n"
+                    announcement_message = await channel.send(startup_announcement)
+                    streaming_llm_response = model_manager.stream('Please announce your presence here in the channel')
+                    await reply_to_message_streaming(announcement_message, streaming_llm_response, startup_announcement)
 
 
 @bot.event
@@ -69,18 +67,19 @@ async def on_message(message: discord.message.Message):
         print(f'extracted question: {question}')
         async with message.channel.typing():
             streaming_llm_response = model_manager.stream(question)
-            await reply_to_message_streaming(message, streaming_llm_response, response_prefix)
+            answer_message = await message.reply(response_prefix)
+            await reply_to_message_streaming(answer_message, streaming_llm_response, response_prefix)
 
 
-async def reply_to_message_streaming(message: discord.message.Message, streaming_llm_response, response_prefix) -> Any:
+async def reply_to_message_streaming(bot_message: discord.message.Message, streaming_llm_response,
+                                     response_prefix) -> Any:
     """
 
-    :param message:
+    :param bot_message:
     :param streaming_llm_response:
     """
     message_buffer = io.StringIO()
     message_buffer.write(response_prefix)
-    answer_message = await message.reply(message_buffer.getvalue())
     start_time = time.time()
     last_updated_time = start_time
     message_content_len = len(response_prefix)
@@ -96,18 +95,18 @@ async def reply_to_message_streaming(message: discord.message.Message, streaming
             new_content = message_buffer.getvalue()
             if len(new_content) > DISCORD_CHAR_LIMIT:
                 embed = discord.Embed(description=message_buffer.getvalue()[message_content_len:])
-                await answer_message.edit(embed=embed)
+                await bot_message.edit(embed=embed)
             else:
                 message_content_len = len(new_content)
-                await answer_message.edit(content=new_content)
+                await bot_message.edit(content=new_content)
         if timeout_reached:
             break
 
     if len(message_buffer.getvalue()) > DISCORD_CHAR_LIMIT:
         embed = discord.Embed(description=message_buffer.getvalue()[message_content_len:])
-        await answer_message.edit(embed=embed)
+        await bot_message.edit(embed=embed)
     else:
-        await answer_message.edit(content=message_buffer.getvalue())
+        await bot_message.edit(content=message_buffer.getvalue())
     print('\nDone answering.')
 
 

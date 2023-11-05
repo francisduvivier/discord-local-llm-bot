@@ -24,7 +24,7 @@ Comma separated list of channels where the bot is allowed to answer. If not set,
 #### MODEL=mistral
 The ollama model to use. Not that this model already needs to be pulled and that ollama needs to already be running on your system
 #### VERBOSE_DEBUG=False
-
+#### SYSTEM_PROMPT=You are a funny bot on an awesome Maker Space Discord guild.
 ### Commands
 
 ```bash
@@ -62,7 +62,7 @@ python -m pytest --cov=discordbot tests --cov-report=html
 
 ## TODO's
 ### Chatty
-- Provide the sender in the question to the llm and provide a system prompt to inform that it is now the KO-LAB LLM Discord bot.
+- Provide the sender in the question to the llm.
 - Back and forth conversations
 - Maybe: Move to orange pi using MLC-AI
   - Remove Ollama depenency

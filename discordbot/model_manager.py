@@ -5,12 +5,15 @@ from typing import Iterator
 import dotenv
 from langchain.callbacks import StreamingStdOutCallbackHandler
 from langchain.schema.messages import BaseMessageChunk
+from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 from discordbot import ollama_config as model_config
 
 dotenv.load_dotenv()
 VERBOSE_DEBUG = os.getenv('VERBOSE_DEBUG') is not None
 DEBUG_STREAMING = os.getenv('DEBUG_STREAMING') is not None
+SYSTEM_PROMPT = os.getenv('SYSTEM_PROMPT') if os.getenv(
+    'SYSTEM_PROMPT') else 'You are a funny bot on an awesome Maker Space Discord guild.'
 
 
 def predict(question: str) -> str:
@@ -29,7 +32,12 @@ def stream(question: str) -> Iterator[BaseMessageChunk]:
     if VERBOSE_DEBUG:
         callbacks = [StreamingStdOutCallbackHandler()]
     llm = model_config.get_model(callbacks)
-    return llm.stream(question)
+    prompt = ChatPromptTemplate.from_messages([
+        ('system', SYSTEM_PROMPT),
+        MessagesPlaceholder(variable_name='history'),
+        ('human', '{input}'),
+    ])
+    return llm.stream(prompt.format(input=question, history=[]))
 
 
 if __name__ == '__main__':
