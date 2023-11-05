@@ -62,7 +62,6 @@ python -m pytest --cov=discordbot tests --cov-report=html
 
 ## TODO's
 ### Chatty
-- Token output limit to avoid endless response.
 - Provide the sender in the question to the llm and provide a system prompt to inform that it is now the KO-LAB LLM Discord bot.
 - Back and forth conversations
 - Maybe: Move to orange pi using MLC-AI

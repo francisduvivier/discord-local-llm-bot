@@ -1,16 +1,15 @@
 import dotenv
-dotenv.load_dotenv()
+
 import io
 import os
 import time
 from typing import Any
-
 import discord
 from discord.ext import commands
 import re
-
 from discordbot import model_manager
 
+dotenv.load_dotenv()
 DISCORD_BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
 DISCORD_ANNOUNCEMENT_CHANNELS = os.getenv('DISCORD_ANNOUNCEMENT_CHANNELS').split(',') if os.getenv(
     'DISCORD_ANNOUNCEMENT_CHANNELS') else []
@@ -21,7 +20,8 @@ DISCORD_ANSWER_CHANNELS = list(map(int, DISCORD_ANSWER_CHANNELS))
 DISCORD_MESSSAGE_UPDATE_INTERVAL = int(os.getenv('DISCORD_MESSSAGE_UPDATE_INTERVAL')) if os.getenv(
     'DISCORD_MESSSAGE_UPDATE_INTERVAL') else 5
 DISCORD_CHAR_LIMIT = int(os.getenv('DISCORD_CHAR_LIMIT')) if os.getenv('DISCORD_CHAR_LIMIT') else 2000
-
+MAX_INFERENCE_DURATION_SECONDS = int(os.getenv('MAX_INFERENCE_DURATION_SECONDS')) if os.getenv(
+    'MAX_INFERENCE_DURATION_SECONDS') else 600  # 10 minutes by default
 intents = discord.Intents.default()
 intents.guilds = True
 intents.messages = True
@@ -78,9 +78,6 @@ async def reply_to_message_streaming(message: discord.message.Message, streaming
     :param message:
     :param streaming_llm_response:
     """
-
-
-async def reply_to_message_streaming(message: discord.message.Message, streaming_llm_response, response_prefix) -> Any:
     message_buffer = io.StringIO()
     message_buffer.write(response_prefix)
     answer_message = await message.reply(message_buffer.getvalue())
@@ -89,6 +86,10 @@ async def reply_to_message_streaming(message: discord.message.Message, streaming
     message_content_len = len(response_prefix)
     for chunk in streaming_llm_response:
         message_buffer.write(str(chunk.content))
+        timeout_reached = False
+        if (time.time() - start_time) > MAX_INFERENCE_DURATION_SECONDS:
+            timeout_reached = True
+            message_buffer.write('\nTimeout reached after ' + str(time.time() - start_time) + ' seconds.')
         if (time.time() - last_updated_time) > DISCORD_MESSSAGE_UPDATE_INTERVAL:
             last_updated_time = time.time()
             print('updating answer via edit call')
@@ -99,6 +100,9 @@ async def reply_to_message_streaming(message: discord.message.Message, streaming
             else:
                 message_content_len = len(new_content)
                 await answer_message.edit(content=new_content)
+        if timeout_reached:
+            break
+
     if len(message_buffer.getvalue()) > DISCORD_CHAR_LIMIT:
         embed = discord.Embed(description=message_buffer.getvalue()[message_content_len:])
         await answer_message.edit(embed=embed)
