@@ -20,6 +20,7 @@ DISCORD_ANSWER_CHANNELS = os.getenv('DISCORD_ANSWER_CHANNELS').split(',') if os.
 DISCORD_ANSWER_CHANNELS = list(map(int, DISCORD_ANSWER_CHANNELS))
 DISCORD_MESSSAGE_UPDATE_INTERVAL = int(os.getenv('DISCORD_MESSSAGE_UPDATE_INTERVAL')) if os.getenv(
     'DISCORD_MESSSAGE_UPDATE_INTERVAL') else 5
+DISCORD_CHAR_LIMIT = int(os.getenv('DISCORD_CHAR_LIMIT')) if os.getenv('DISCORD_CHAR_LIMIT') else 2000
 
 intents = discord.Intents.default()
 intents.guilds = True
@@ -41,11 +42,13 @@ async def on_ready():
     for guild in bot.guilds:
         for channel in guild.channels:
             if channel.id in DISCORD_ANNOUNCEMENT_CHANNELS:
-                startupAnnouncement = "Local LLM Discord Bot starting up ..."
-                message = await channel.send(startupAnnouncement)
-                llm_response = model_manager.predict(
-                    'You are a discord bot on an awesome Maker Space Discord guild, write a startup message to announce your presence in the channel.')
-                await message.edit(content=startupAnnouncement + '\nEdit: Model says: ' + llm_response)
+                async with channel.typing():
+                    startup_announcement = "Local LLM Discord Bot starting up ..."
+                    message = await channel.send(startup_announcement)
+                    llm_response = model_manager.predict(
+                        'You are a discord bot on an awesome Maker Space Discord guild, write a startup message to '
+                        'announce your presence in the channel.')
+                    await message.edit(content=startup_announcement + '\nEdit: Model says: ' + llm_response)
 
 
 @bot.event
@@ -64,8 +67,9 @@ async def on_message(message: discord.message.Message):
 
         response_prefix = f'{salute}<@{message.author.id}>, '
         print(f'extracted question: {question}')
-        streaming_llm_response = model_manager.stream(question)
-        await reply_to_message_streaming(message, streaming_llm_response, response_prefix)
+        async with message.channel.typing():
+            streaming_llm_response = model_manager.stream(question)
+            await reply_to_message_streaming(message, streaming_llm_response, response_prefix)
 
 
 async def reply_to_message_streaming(message: discord.message.Message, streaming_llm_response, response_prefix) -> Any:
@@ -75,18 +79,31 @@ async def reply_to_message_streaming(message: discord.message.Message, streaming
     :param streaming_llm_response:
     """
 
+
+async def reply_to_message_streaming(message: discord.message.Message, streaming_llm_response, response_prefix) -> Any:
     message_buffer = io.StringIO()
     message_buffer.write(response_prefix)
     answer_message = await message.reply(message_buffer.getvalue())
     start_time = time.time()
     last_updated_time = start_time
+    message_content_len = len(response_prefix)
     for chunk in streaming_llm_response:
         message_buffer.write(str(chunk.content))
         if (time.time() - last_updated_time) > DISCORD_MESSSAGE_UPDATE_INTERVAL:
             last_updated_time = time.time()
             print('updating answer via edit call')
-            await answer_message.edit(content=message_buffer.getvalue())
-    await answer_message.edit(content=message_buffer.getvalue())
+            new_content = message_buffer.getvalue()
+            if len(new_content) > DISCORD_CHAR_LIMIT:
+                embed = discord.Embed(description=message_buffer.getvalue()[message_content_len:])
+                await answer_message.edit(embed=embed)
+            else:
+                message_content_len = len(new_content)
+                await answer_message.edit(content=new_content)
+    if len(message_buffer.getvalue()) > DISCORD_CHAR_LIMIT:
+        embed = discord.Embed(description=message_buffer.getvalue()[message_content_len:])
+        await answer_message.edit(embed=embed)
+    else:
+        await answer_message.edit(content=message_buffer.getvalue())
     print('\nDone answering.')
 
 
