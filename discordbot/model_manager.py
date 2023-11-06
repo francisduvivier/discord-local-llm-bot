@@ -36,8 +36,12 @@ def stream(question: str, message_history: List[BaseMessage] = None) -> Iterator
     messages = [
         SystemMessage(content=SYSTEM_PROMPT),
     ]
-    if message_history is not None:
+    if message_history is not None and len(message_history) > 0:
         messages.extend(message_history)
+    else:
+        messages.append(SystemMessage(
+            content='The following human message came in without any reference to a previous message. Because of this, you have no recollection of an earlier conversation.'
+                    'So if the human hints at some previous interaction, then kindly inform him that he should use the "reply to message" feature in Discord if he wants to continue some earlier conversation.'))
     messages.append(HumanMessage(content=question))
     return llm.stream(messages, verbose=VERBOSE_DEBUG)
 
