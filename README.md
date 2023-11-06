@@ -61,7 +61,6 @@ python -m pytest --cov=discordbot tests --cov-report=html
 - Streaming output: takes the streaming output of the LLM and then uses the discord edit api to update the message every 5 seconds.
 - Configurable via a .env file
 - Supports back and forth conversations via replies to messages.
-- Supports going further on previous human questions by answering to those.
 
 ## TODO's
 ### Chatty

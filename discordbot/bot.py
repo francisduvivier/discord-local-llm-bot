@@ -55,19 +55,6 @@ async def on_ready():
                     await add_response_streaming(announcement_message, streaming_llm_response, startup_announcement)
 
 
-async def referenced_message_is_from_bot(message):
-    channel = message.channel
-    if message.reference is None or message.reference.message_id is None:
-        return False
-    referenced_message_id = message.reference.message_id
-    referenced_message = await channel.fetch_message(referenced_message_id)
-    return (
-        bot.user.mentioned_in(referenced_message)  # this was a reply to a message from the bot
-        or referenced_message.author.id == bot.user.id
-        # this was a reply to a message towards the bot, so it's an addition
-    )
-
-
 @bot.event
 async def on_message(message: discord.message.Message):
     if message.author == bot.user:
@@ -77,9 +64,7 @@ async def on_message(message: discord.message.Message):
 
     if not is_supported_channel(message.channel.id):
         return
-    if ((bot.user.mentioned_in(message) and message.author.id != bot.user.id)  # Prevent accidental endless reply loop
-        or not message.author.bot and await referenced_message_is_from_bot(message)
-    ):
+    if bot.user.mentioned_in(message) and message.author.id != bot.user.id:  # Prevent accidental endless reply loop
         pattern = '((?P<salute>[^@]*)<@.*>)?[^a-zA-Z]*(?P<question>.*)'
         (_, salute, question) = re.search(pattern, message.content).groups()
         if salute is None:
