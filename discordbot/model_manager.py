@@ -8,7 +8,7 @@ from langchain.globals import set_debug
 from discordbot import ollama_config as model_config
 
 dotenv.load_dotenv()
-VERBOSE_DEBUG = os.getenv('VERBOSE_DEBUG') is not None
+VERBOSE_DEBUG = os.getenv('VERBOSE_DEBUG') == 'True'
 DEBUG_STREAMING = os.getenv('DEBUG_STREAMING') is not None
 BOT_TITLE = os.getenv('BOT_TITLE') if os.getenv('BOT_TITLE') else 'MakerMate, The Maker Space LLM Discord Bot'
 SYSTEM_PROMPT = os.getenv('SYSTEM_PROMPT') if os.getenv(

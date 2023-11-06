@@ -15,8 +15,7 @@ MODEL_PATH_FALLBACK = ("%s%s" % (MODELS_BASE_DIR, model))
 MODEL_PATH = os.getenv('MODEL_PATH') if os.getenv(
     'MODEL_PATH') else MODEL_PATH_FALLBACK
 
-VERBOSE_DEBUG = os.getenv('VERBOSE_DEBUG') is not None
-
+VERBOSE_DEBUG = os.getenv('VERBOSE_DEBUG') == 'True'
 
 def get_model(callbacks: List[BaseCallbackHandler] | None = None) -> LLM:
     callback_manager = None

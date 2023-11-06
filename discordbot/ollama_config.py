@@ -11,7 +11,7 @@ MODEL_FALLBACK = 'mistral'
 MODEL = os.getenv('MODEL') if os.getenv(
     'MODEL') else MODEL_FALLBACK
 
-VERBOSE_DEBUG = os.getenv('VERBOSE_DEBUG') is not None
+VERBOSE_DEBUG = os.getenv('VERBOSE_DEBUG') == 'True'
 
 
 def get_model(callbacks: List[BaseCallbackHandler] | None = None):
