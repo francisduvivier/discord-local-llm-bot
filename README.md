@@ -25,7 +25,6 @@ Comma separated list of channels where the bot is allowed to answer. If not set,
 #### MODEL=mistral
 The ollama model to use. Not that this model already needs to be pulled and that ollama needs to already be running on your system
 #### VERBOSE_DEBUG=False
-#### SYSTEM_PROMPT=You are a funny bot on an awesome Maker Space Discord guild.
 ### Commands
 
 ```bash
