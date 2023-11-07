@@ -2,9 +2,8 @@ import io
 import os
 
 import dotenv
-from typing import Iterator, List, Dict
+from typing import Iterator, List
 from langchain.callbacks import StreamingStdOutCallbackHandler
-from langchain.prompts import PromptTemplate
 from langchain.schema.messages import BaseMessageChunk, HumanMessage, SystemMessage, BaseMessage
 from langchain.globals import set_debug
 from discordbot import ollama_config as model_config
