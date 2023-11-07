@@ -18,4 +18,6 @@ async def get_message_history(message: discord.Message) -> List[BaseMessage]:
             messages.append(HumanMessage(content=referenced_message.content))
         current_message = referenced_message
 
+    # Last appended messages should be first in the list since they are the oldest
+    messages.reverse()
     return messages
