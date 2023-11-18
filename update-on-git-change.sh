@@ -1,6 +1,7 @@
 source ~/.bash_profile
 killall caffeinate || echo 'ok';
 caffeinate &;
+ssh op5b.local '/home/fduvivier/planmail/send.sh botok' || echo 'ok';
 SCRIPT_DIR=$(dirname $0)
 cd $SCRIPT_DIR
 git stash -m "local stuff"
