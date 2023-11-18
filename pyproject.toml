@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "python-discord-llm-bot"
+name = "discordbot"
 version = "0.1.0"
 description = "A discord bot made for Hacker/Maker spaces so that they can be assisted by a locally running LLM on discord."
 authors = ["Francis Duvivier <francisduvivier@gmail.com>"]

@@ -62,11 +62,6 @@ python -m pytest --cov=discordbot tests --cov-report=html
 - Supports back and forth conversations via replies to messages.
 
 ## TODO's
-### Chatty
-- Maybe: Move to orange pi using MLC-AI
-  - Remove Ollama dependency
-- Maybe: Provide an api, messages starting with slash should trigger stuff like set temp and set system prompt.
-
 ### RAG
 - Internet Browsing
 - Index Whole Discord channel contents and let LLM search through that in its answers
@@ -74,3 +69,16 @@ python -m pytest --cov=discordbot tests --cov-report=html
   - Impersonate Discord users: Hey @bot what would @FrancisD say to this question: ...
 - Index the whole Ko-Lab Wiki and allow answering questions about the wiki:
   - Eg. Hey @bot is there an event on the wiki next friday? Or simpler, is there a project about 3D printing?
+
+### Deployment
+- Deployment using ansible
+- Deploy to Orange Pi
+- Dockerize
+
+### Product/Architecture
+- Move to MLC-LLM in order to be able to use orange pi.
+- Redundancy: use kubernetes for redundancy and rolling upgrades
+- Maybe: make this available as a bot that any server can integrate if they provide a openai key.
+- Maybe: Provide an api, messages starting with slash should trigger stuff like set temp and set system prompt.
+
+
