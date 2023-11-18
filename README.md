@@ -1,5 +1,5 @@
 # Local LLM Discord Bot for Hacker Spaces
-This is a project for a Discord bot using a Local Large Language model.
+A conversational Discord bot using a Local Large Language Model.
 
 ![Python](https://img.shields.io/badge/python-3.11+-blue)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
