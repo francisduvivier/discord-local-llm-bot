@@ -22,8 +22,8 @@ I followed this guide for that: https://www.ionos.com/digitalguide/server/know-h
 Comma separated list of channels where the bot should announce itself every time that it starts up. If not set, it doesn't announce itself at startup.
 #### DISCORD_ANSWER_CHANNELS=
 Comma separated list of channels where the bot is allowed to answer. If not set, it will answer in any channel where it has access and is tagged.
-#### MODEL=mistral
-The ollama model to use. Not that this model already needs to be pulled and that ollama needs to already be running on your system
+#### MODEL=zephyr:7b-beta
+[](url)The ollama model to use. Not that this model already needs to be pulled and that ollama needs to already be running on your system
 #### VERBOSE_DEBUG=False
 ### Commands
 
