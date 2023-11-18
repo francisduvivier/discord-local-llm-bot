@@ -1,3 +1,4 @@
+source ~/.bash_profile
 SCRIPT_DIR=$(dirname $0)
 cd $SCRIPT_DIR
 git stash -m "local stuff"
