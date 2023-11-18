@@ -39,17 +39,17 @@ poetry install
 
 ```bash
 # test
-python -m pytest
+poetry run python -m pytest
 ```
 
 ```bash
 # run the bot
-python discordbot
+poetry run python discordbot
 ```
 
 ```bash
 # Code Coverage
-python -m pytest --cov=discordbot tests --cov-report=html
+poetry run python -m pytest --cov=discordbot tests --cov-report=html
 ```
 
 ## Features
