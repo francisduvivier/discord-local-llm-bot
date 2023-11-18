@@ -14,7 +14,7 @@ else
     killall Python || echo 'Python not running yet';
     poetry install;
     screen -S bot -X quit || echo 'no prob';
-    screen -dmS bot sh -c 'poetry run python discordbot 2>log.error.ignorethis.txt 1>log.ignorethis.txt';
+    screen -dmS bot bash -c 'source ~/.bash_profile && poetry run python discordbot 2>log.error.ignorethis.txt 1>log.ignorethis.txt';
     echo "restarted discordbot"
 fi
 
