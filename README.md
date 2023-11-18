@@ -71,9 +71,8 @@ poetry run python -m pytest --cov=discordbot tests --cov-report=html
   - Eg. Hey @bot is there an event on the wiki next friday? Or simpler, is there a project about 3D printing?
 
 ### Deployment
+- Dockerize package
 - Deployment using ansible
-- Deploy to Orange Pi
-- Dockerize
 
 ### Product/Architecture
 - Move to MLC-LLM in order to be able to use orange pi.
