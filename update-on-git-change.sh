@@ -1,4 +1,6 @@
 source ~/.bash_profile
+killall caffeinate || echo 'ok';
+caffeinate &;
 SCRIPT_DIR=$(dirname $0)
 cd $SCRIPT_DIR
 git stash -m "local stuff"
