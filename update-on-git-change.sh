@@ -1,6 +1,5 @@
 source /home/fduvivier/.bash_profile
 ssh fduvivier@op5b.local 'echo hi' || echo 'no prob';
-exit 0; #TODO REVERT
 
 screen -S caffeinate -X quit || echo 'no prob';
 screen -dmS caffeinate -c 'caffeinate';
