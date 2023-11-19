@@ -49,7 +49,7 @@ async def on_ready():
         for channel in guild.channels:
             if channel.id in DISCORD_ANNOUNCEMENT_CHANNELS:
                 async with channel.typing():
-                    startup_announcement = BOT_TITLE + " is starting up...\n"
+                    startup_announcement = BOT_TITLE + " v0 is starting up...\n"
                     announcement_message = await channel.send(startup_announcement)
                     streaming_llm_response = model_manager.stream('Please announce your presence here in the channel.')
                     await add_response_streaming(announcement_message, streaming_llm_response, startup_announcement)
