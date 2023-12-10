@@ -36,12 +36,13 @@ def stream(question: str, message_history: List[BaseMessage] = None) -> Iterator
     llm = model_config.get_model(callbacks)
 
     messages = [
-        SystemMessage(content=SYSTEM_PROMPT),
+        # SystemMessage(content=SYSTEM_PROMPT),
     ]
     if message_history is not None and len(message_history) > 0:
         messages.extend(message_history)
-    messages.append(HumanMessage(content=question))
-    return llm.stream(messages, verbose=VERBOSE_DEBUG)
+        messages.append(HumanMessage(content=question))
+        return llm.stream(messages, verbose=VERBOSE_DEBUG)
+    return llm.stream(question, verbose=VERBOSE_DEBUG)
 
 
 if __name__ == '__main__':
