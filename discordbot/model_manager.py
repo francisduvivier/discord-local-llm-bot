@@ -12,6 +12,8 @@ dotenv.load_dotenv()
 VERBOSE_DEBUG = os.getenv('VERBOSE_DEBUG') == 'True'
 DEBUG_STREAMING = os.getenv('DEBUG_STREAMING') is not None
 BOT_TITLE = os.getenv('BOT_TITLE') if os.getenv('BOT_TITLE') else 'MakerMate, The Maker Space LLM Discord Bot'
+SYSTEM_PROMPT = os.getenv('SYSTEM_PROMPT') if os.getenv(
+    'SYSTEM_PROMPT') else f'You are called {BOT_TITLE}. You are a funny bot on an awesome Maker Space Discord guild.'
 
 set_debug(VERBOSE_DEBUG)
 
@@ -34,6 +36,7 @@ def stream(question: str, message_history: List[BaseMessage] = None) -> Iterator
     llm = model_config.get_model(callbacks)
 
     messages = [
+        SystemMessage(content=SYSTEM_PROMPT),
     ]
     if message_history is not None and len(message_history) > 0:
         messages.extend(message_history)
