@@ -55,6 +55,10 @@ async def on_ready():
                     await add_response_streaming(announcement_message, streaming_llm_response, startup_announcement)
 
 
+def is_direct_message(message):
+    return message.channel.type.name == 'private'
+
+
 @bot.event
 async def on_message(message: discord.message.Message):
     if message.author == bot.user:
@@ -62,9 +66,11 @@ async def on_message(message: discord.message.Message):
 
     print(f'Received message: {message.content}')
 
-    if not is_supported_channel(message.channel.id):
+    if not is_direct_message(message) and not is_supported_channel(message.channel.id):
         return
-    if bot.user.mentioned_in(message) and message.author.id != bot.user.id:  # Prevent accidental endless reply loop
+    if message.author.id == bot.user.id:
+        return
+    if bot.user.mentioned_in(message) or is_direct_message(message):  # Prevent accidental endless reply loop
         pattern = '((?P<salute>[^@]*)<@.*>)?[^a-zA-Z]*(?P<question>.*)'
         (_, salute, question) = re.search(pattern, message.content).groups()
         if salute is None:

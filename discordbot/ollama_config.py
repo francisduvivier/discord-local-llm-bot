@@ -23,7 +23,7 @@ def get_model(callbacks: List[BaseCallbackHandler] | None = None):
         callback_manager=callback_manager,
         verbose=VERBOSE_DEBUG,
         streaming=True,
-        stop=['[INST]']
+        stop=['[INST]', '<|im_end|>']
     )
     return chat_model
 
