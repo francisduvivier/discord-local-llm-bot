@@ -35,11 +35,11 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 BOT_TITLE = model_manager.BOT_TITLE
 
 
-def is_supported_channel(channel_id):
+def is_supported_channel(channel: discord.channel.TextChannel):
     if len(DISCORD_ANSWER_CHANNELS) == 0:
         # Allow all channels if the channel list is empty
         return True
-    return channel_id in DISCORD_ANSWER_CHANNELS
+    return channel.id in DISCORD_ANSWER_CHANNELS or channel.category_id in DISCORD_ANSWER_CHANNELS
 
 
 @bot.event
@@ -66,7 +66,7 @@ async def on_message(message: discord.message.Message):
 
     print(f'Received message: {message.content}')
 
-    if not is_direct_message(message) and not is_supported_channel(message.channel.id):
+    if not is_direct_message(message) and not is_supported_channel(message.channel):
         return
     if message.author.id == bot.user.id:
         return
